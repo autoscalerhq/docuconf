@@ -6,7 +6,9 @@ import (
 )
 
 func TestMyConfCompleteOutput(t *testing.T) {
-	result, err := NewConfBuilder("configuration").AddString("SomeField", "Some Description").Execute()
+	result, err := NewConfBuilder("configuration").
+		AddString("SomeField", "Some Description", false, "").
+		Execute()
 	if err != nil {
 		t.Error(err)
 		return
@@ -31,7 +33,7 @@ type Configuration struct {
 
 func TestAddStringNotEnoughDescription(t *testing.T) {
 	result := assertPanic(t, func() {
-		NewConfBuilder("configuration").AddString("SomeField", "")
+		NewConfBuilder("configuration").AddString("SomeField", "", true, "")
 	})
 	err, isError := result.(error)
 	expected := "AddString(SomeField, ) Failed: description must be at least 5 characters long. This is to ensure your configuration is well documented"
