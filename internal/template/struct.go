@@ -10,9 +10,12 @@ type {{.StructName}} struct {
 
 const MarkDownVariables = NoEditMark + `
 # Configuration
-
 {{range .Fields}}
-## {{.Name}} - {{.Type}} - 
-Description: {{.Description}}
+---
+### {{.Name}} - ` + "`{{.Type}}`" + ` - ({{if .Required}}Required{{else}}Optional{{end}})
+**Description**
+
+{{.Description}}
 {{end}}
+---
 `

@@ -6,24 +6,55 @@ import (
 	tmpl "github.com/autoscalerhq/docuconf/internal/template"
 	"io"
 	"os"
+	"path/filepath"
 	"text/template"
 )
 
-func (c *ConfBuilder) Execute() (string, error) {
+type OutputFile struct {
+	Path    string
+	Content string
+}
+
+type ExecutionResult struct {
+	GoFiles       []OutputFile
+	MarkDownFiles []OutputFile
+}
+
+func (c *ConfBuilder) Execute() (*ExecutionResult, error) {
 	if err := os.MkdirAll(c.outPath, os.ModePerm); err != nil {
-		return "", fmt.Errorf("create model pkg path(%s) fail: %s", c.outPath, err)
+		return nil, fmt.Errorf("create model pkg path(%s) fail: %s", c.outPath, err)
 	}
-	var buf bytes.Buffer
+	var goCodeBuf bytes.Buffer
 	meta := ConfStructMeta{
 		Package:    "configuration",
 		StructName: "Configuration",
 		Fields:     c.options,
 	}
-	if err := render(tmpl.Struct, &buf, meta); err != nil {
+	if err := render(tmpl.Struct, &goCodeBuf, meta); err != nil {
 		//goland:noinspection GoPrintFunctions
-		return "", fmt.Errorf("failed to render template: %s", err)
+		return nil, fmt.Errorf("failed to render template: %s", err)
 	}
-	return buf.String(), nil
+
+	var markdownBuf bytes.Buffer
+
+	if err := render(tmpl.MarkDownVariables, &markdownBuf, meta); err != nil {
+		return nil, fmt.Errorf("failed to render template: %s", err)
+	}
+	result := &ExecutionResult{
+		GoFiles: []OutputFile{
+			{
+				Path:    filepath.Join(c.outPath, "configuration.go"),
+				Content: goCodeBuf.String(),
+			},
+		},
+		MarkDownFiles: []OutputFile{
+			{
+				Path:    filepath.Join(c.outPath, "README.md"),
+				Content: markdownBuf.String(),
+			},
+		},
+	}
+	return result, nil
 }
 
 func render(tmpl string, wr io.Writer, data interface{}) error {
