@@ -7,3 +7,12 @@ type {{.StructName}} struct {
   {{- end}}
 }
 `
+
+const MarkDownVariables = NoEditMark + `
+# Configuration
+
+{{range .Fields}}
+## {{.Name}} - {{.Type}} - 
+Description: {{.Description}}
+{{end}}
+`
