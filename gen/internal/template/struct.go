@@ -1,14 +1,22 @@
 package template
 
 const Struct = Header + `
+import "github.com/autoscalerhq/docuconf"
+
 type {{.StructName}} struct {
   {{- range .Fields}} 
 
   // {{.Description}}
   // {{if .SharedWith}}also used in: {{ range .SharedWith}}{{.}}{{end}}{{end}}
-  {{.Name}} {{.Type}} 
+  {{.Name}} {{.Type}} ` + "`env:\"" + `{{.TagName}}` + "\"`" + `
   {{- end}}
 }
+
+func Load{{.StructName}}(path string) ({{.StructName}}, error) {
+	env, err := docuconf.LoadDotEnv(path, {{.StructName}}{})
+	return env, err
+}
+
 `
 
 const MarkDownVariables = NoEditMark + `
