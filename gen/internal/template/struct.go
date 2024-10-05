@@ -1,7 +1,11 @@
 package template
 
 const Struct = Header + `
-import "github.com/autoscalerhq/docuconf"
+import (
+	"github.com/autoscalerhq/docuconf"
+	"os"
+	"errors"
+)
 
 type {{.StructName}} struct {
   {{- range .Fields}} 
@@ -13,7 +17,11 @@ type {{.StructName}} struct {
 }
 
 func Load{{.StructName}}(path string) ({{.StructName}}, error) {
-	env, err := docuconf.LoadDotEnv(path, New{{.StructName}}())
+    defaultEnv := New{{.StructName}}()
+	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
+		return defaultEnv, nil
+	}
+	env, err := docuconf.LoadDotEnv(path, defaultEnv)
 	return env, err
 }
 
