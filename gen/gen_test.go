@@ -26,7 +26,11 @@ func TestMyConfCompleteOutput(t *testing.T) {
 
 func TestSharedConfigWithMultipleServices(t *testing.T) {
 
-	sharedConfig := NewConfBuilder().AddString("SharedField", "Shared Description", false, "")
+	sharedConfig := NewConfBuilder().
+		AddString("SharedField", "Shared Description", false, "A default value").
+		AddBool("SharedBool", "Shared Bool Description", false, false).
+		AddInt("SharedInt", "Shared Int Description", false, 0).
+		AddFloat("SharedFloat", "Shared Float Description", false, "0.0")
 
 	service1 := NewService("Service 1", "service1", filepath.Join("output", "service1"), AdditionalOptions{}).
 		AddString("Service1Field", "Service 1 Description", false, "").

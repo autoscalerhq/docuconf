@@ -13,8 +13,16 @@ type {{.StructName}} struct {
 }
 
 func Load{{.StructName}}(path string) ({{.StructName}}, error) {
-	env, err := docuconf.LoadDotEnv(path, {{.StructName}}{})
+	env, err := docuconf.LoadDotEnv(path, New{{.StructName}}())
 	return env, err
+}
+
+func New{{.StructName}}() {{.StructName}} {
+	return {{.StructName}}{
+	{{- range .Fields}} 
+		{{if .Default}}{{.Name}}: {{.Default}},{{end}}
+  	{{- end}}
+	}
 }
 
 `

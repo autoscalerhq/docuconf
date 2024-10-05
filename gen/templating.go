@@ -16,13 +16,20 @@ import (
 func convertConfOptionsToMeta(s *Service) []internal.ConfOptionMeta {
 	var result []internal.ConfOptionMeta
 	for _, o := range s.builder.options {
+		var defaultValueFormatted = ""
+		switch o.Type {
+		case "string":
+			defaultValueFormatted = fmt.Sprintf("\"%s\"", o.Default)
+		default:
+			defaultValueFormatted = o.Default
+		}
 		result = append(result, internal.ConfOptionMeta{
 			Name:        o.Name,
 			EnvName:     toCapSnakeCase(o.Name),
 			Type:        o.Type,
 			Description: o.Description,
 			Required:    o.Required,
-			Default:     o.Default,
+			Default:     defaultValueFormatted,
 			SharedWith:  convertServicesToStrings(o.Services, s),
 		})
 	}

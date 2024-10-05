@@ -114,7 +114,7 @@ func (c *ConfBuild) AddBool(name string, description string, required bool, defa
 	if len(name) == 0 {
 		panic(fmt.Errorf("AddBool(%s, %s) Failed: name must be a non empty string", name, description))
 	}
-	c.options = append(c.options, &confOption{Name: name, Description: description, Type: "int", Required: required, Default: strconv.FormatBool(defaultValue), Builder: c})
+	c.options = append(c.options, &confOption{Name: name, Description: description, Type: "bool", Required: required, Default: strconv.FormatBool(defaultValue), Builder: c})
 	return c
 }
 
@@ -131,7 +131,7 @@ func (c *ConfBuild) AddFloat(name string, description string, required bool, def
 		panic(fmt.Errorf("AddFloat(%s, %s) Failed: name must be a non empty string", name, description))
 	}
 
-	c.options = append(c.options, &confOption{Name: name, Description: description, Type: "int", Required: required, Default: defaultValue, Builder: c})
+	c.options = append(c.options, &confOption{Name: name, Description: description, Type: "float64", Required: required, Default: defaultValue, Builder: c})
 	return c
 }
 
