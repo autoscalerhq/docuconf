@@ -8,7 +8,7 @@ type {{.StructName}} struct {
 
   // {{.Description}}
   // {{if .SharedWith}}also used in: {{ range .SharedWith}}{{.}}{{end}}{{end}}
-  {{.Name}} {{.Type}} ` + "`env:\"" + `{{.TagName}}` + "\"`" + `
+  {{.Name}} {{.Type}} ` + "`env:\"" + `{{.EnvName}}` + "\"`" + `
   {{- end}}
 }
 

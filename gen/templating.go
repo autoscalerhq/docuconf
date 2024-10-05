@@ -18,7 +18,7 @@ func convertConfOptionsToMeta(s *Service) []internal.ConfOptionMeta {
 	for _, o := range s.builder.options {
 		result = append(result, internal.ConfOptionMeta{
 			Name:        o.Name,
-			TagName:     toCapSnakeCase(o.Name),
+			EnvName:     toCapSnakeCase(o.Name),
 			Type:        o.Type,
 			Description: o.Description,
 			Required:    o.Required,

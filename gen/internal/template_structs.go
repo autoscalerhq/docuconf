@@ -9,7 +9,7 @@ type ConfStructMeta struct {
 
 type ConfOptionMeta struct {
 	Name        string
-	TagName     string
+	EnvName     string
 	Type        string
 	Description string
 	Required    bool
